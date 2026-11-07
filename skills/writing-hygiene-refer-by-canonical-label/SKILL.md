@@ -8,7 +8,8 @@ description: |
   "the 2026-10-16 comment". The label is the one the thing already has where
   the reader would look (its title, subject, heading or name), or a short
   descriptive name coined at first mention. Machine identifiers go in
-  parentheses after the label; anything with an address is a link; vague
+  parentheses after the label; an acronym comes first, with its expansion
+  in parentheses at its first use; anything with an address is a link; vague
   pointers like "the fix above" are replaced by the label. Use whenever
   writing prose that refers to things defined elsewhere: status reports,
   PR bodies, commit messages, replies, reviews, docs, an agent's turn
@@ -63,6 +64,9 @@ thing.
   find the thing once they know what it is; they don't tell them what it
   is. Branch names read especially badly: dashes, slashes and underscores
   in place of words.
+- **An acronym comes first, its expansion after it in parentheses, at its
+  first use in a text:** CRP (C-reactive protein). Don't coin an acronym
+  where none is in common use.
 - **Name an event by what happened, with the date after it.** "The
   maintainer's reply agreeing to Q2 and Q3 (2026-10-16)", not "the
   2026-10-16 comment".
