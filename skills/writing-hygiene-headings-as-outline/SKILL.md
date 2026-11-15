@@ -1,42 +1,19 @@
 ---
 name: writing-hygiene-headings-as-outline
-description: |
-  Break a long, single-stream document into a heading hierarchy that mirrors
-  its topic structure, so the headings alone read as an outline and the
-  reader can skim the shape before committing to the prose. Covers when a
-  wall of text is hiding sections (topic shifts, parallel sub-topics,
-  "first… also… finally" seams), how to assign levels (one title, sections,
-  sub-sections, no skipped levels), how to write heading text that scans,
-  why a bold line is not a heading, and when not to add headings (a few
-  paragraphs on one topic, a chat message, a single linear argument). Any
-  format: docs, READMEs, design docs, RFCs, long PR descriptions, release
-  notes, reports. Use when a document runs longer than a screen and covers
-  more than one topic, or when the user asks to "add headings", "give this
-  structure", "make it skimmable", "outline this" or "break this into
-  sections".
-tags: [writing, structure]
+description: Break a long, single-stream document into a heading hierarchy that mirrors its topic structure, so the headings alone read as an outline and the reader can skim the shape before committing to the prose. Covers when a wall of text is hiding sections (topic shifts, parallel sub-topics, "first… also… finally" seams), how to assign levels (one title, sections, sub-sections, no skipped levels), how to write heading text that scans, why a bold line is not a heading, and when not to add headings (a few paragraphs on one topic, a chat message, a single linear argument). Any format: docs, READMEs, design docs, RFCs, long PR descriptions, release notes, reports. Use when a document runs longer than a screen and covers more than one topic, or when the user asks to "add headings", "give this structure", "make it skimmable", "outline this" or "break this into sections".
 ---
 
-# writing-hygiene-headings-as-outline
+# Headings as an outline
 
-A document longer than a screen is read in two passes: first the reader
-skims to find the part they need, then they read that part. Headings are
-what the first pass lands on. A good heading tree is an outline the eye can
-walk (the title, the major sections, their sub-points), so the reader builds
-a map of the whole before reading a word of body text. A document with no
-headings forces every reader to read linearly to find anything; a document
-with the wrong headings sends them to the wrong place. This skill gives a
-document a heading shape that matches its actual topic hierarchy.
+_A document longer than a screen gets a heading tree that matches its topic hierarchy, so the headings alone read as its outline._
 
-It covers when and why, in any format. Heading syntax in a given format
-(Markdown's `#` levels, ATX style) is in
+A long document is read in two passes: first the reader skims to find the
+part they need, then they read that part. Headings are what the first pass
+lands on. With none, every reader reads linearly to find anything; with the
+wrong ones, they land in the wrong place.
+
+Heading syntax in a given format (Markdown's `#` levels, ATX style) is in
 `markdown-hygiene-lists-headings-tables`.
-
-## How to load this skill
-
-Passive reference. Loading it doesn't mean the user wants a document
-restructured now; it means that when you write or edit a long document,
-you'll give it an outline.
 
 ## When this applies
 
@@ -83,7 +60,8 @@ finish, it doesn't need headings.
    "separately…", "another thing…" transitions. Each genuine shift is a
    candidate section boundary.
 2. **Assign levels by hierarchy, not by size.** One top-level heading is the
-   document's title. Major topics are the next level down; a topic's own
+   document's title; demote any other top-level topic to a section, since
+   several top-level headings flatten the outline. Major topics are the next level down; a topic's own
    sub-points are the level below that. The level encodes containment (a
    child heading is part of its parent's topic), not how long the section
    is.
@@ -152,9 +130,6 @@ dropped.
 - **Don't use a heading for emphasis.** A bigger font to make a line stand
   out misuses the outline; use bold or a callout, and reserve heading levels
   for actual hierarchy.
-- **One title per document.** Several top-level headings flatten the
-  hierarchy and confuse table-of-contents tools; demote extra top-level
-  topics to sections.
 - **Keep nesting shallow.** Past three or four levels the hierarchy is
   usually too fine: flatten it or split the document. Deep nesting is as
   hard to skim as none.
@@ -179,6 +154,15 @@ dropped.
   "now, on…" transitions.
 - The user asks to add headings, outline a document or make it skimmable.
 
+## Your preferences
+
+!`cat "${CLAUDE_SKILL_DIR}/../writing-hygiene-headings-as-outline.preferences.md" "${CLAUDE_PROJECT_DIR}/.agents/skills/writing-hygiene-headings-as-outline.preferences.md" 2>/dev/null || true`
+
+If your agent doesn't run the line above, read these files yourself if they
+exist: `writing-hygiene-headings-as-outline.preferences.md` next to this skill's folder, then
+`.agents/skills/writing-hygiene-headings-as-outline.preferences.md` in the project. A project's
+file overrides the user's, and the user's overrides this skill's defaults.
+
 ## Related skills
 
 When one of these applies and it's in your skill listing, load it
@@ -188,3 +172,4 @@ came from; don't apply it from memory.
 
 - `markdown-hygiene-lists-headings-tables`: Markdown syntax for headings: `#` levels, ATX style, anchors.
 - `writing-hygiene-prose-to-lists`: when a "section" is really one sentence, a list item instead of a heading.
+- `coding-agent-skill-references`: the preferences files this skill reads.
