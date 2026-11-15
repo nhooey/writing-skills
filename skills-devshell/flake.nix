@@ -1,5 +1,5 @@
 {
-  description = "writing-skills dev-shell skill set — an isolated sub-flake invoked at RUNTIME by the root devShell, never a root input. The skill sources (the git/GitHub pack plus skillspkgs' authoring combination) live only in THIS flake's lock, so the root writing-skills stays a leaf with zero skill inputs and transitive consumers never drag the skill mesh in.";
+  description = "writing-skills dev-shell skill set — an isolated sub-flake invoked at RUNTIME by the root devShell, never a root input. The skill sources live only in THIS flake's lock, so the root writing-skills stays a leaf with zero skill inputs and transitive consumers never drag the skill mesh in.";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -19,25 +19,44 @@
     # aggregate-key the strict namespace check rejects, so each source keeps
     # its own (compatible) builder. `mkDevshellSkillsFlake` still runs from this
     # flake's `agent-skill-flake.lib`, so the combiner is the pinned rev above.
-
+    coding-agent-skills = {
+      url = "github:nhooey/coding-agent-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     git-skills = {
-      url = "github:nhooey/git-skills";
+      url = "github:nhooey/git-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-skills = {
+      url = "github:nhooey/nix-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    shell-skills = {
+      url = "github:nhooey/shell-skills/overnight-skills";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    writing-skills = {
+      url = "github:nhooey/writing-skills/overnight-skills";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # skillspkgs' curated `authoring` combination, surfaced through its own
     # subdir flake (`mkCombination` keeps a combination re-composable). A
     # `?dir=` into a *different* repo fetches cleanly for transitive consumers.
+    # Its git-skills and nix-skills follow the inputs above, so the dev shell
+    # installs one revision of each.
     skillspkgs-combinations = {
       url = "github:nhooey/skillspkgs?dir=sources/combinations";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        git-skills.follows = "git-skills";
+        nix-skills.follows = "nix-skills";
+      };
     };
   };
 
   # One `mkDevshellSkillsFlake` call: the dev shell's whole skill set as a
-  # single combination, surfaced as runnable apps (reconcile / purge / …). This
-  # reproduces the previously-inlined root set exactly — the git/GitHub pack
-  # plus skillspkgs' `authoring` combination.
+  # single combination, surfaced as runnable apps (reconcile / purge / …).
   outputs =
     {
       nixpkgs,
@@ -48,12 +67,26 @@
       inherit nixpkgs;
       systems = import inputs.systems;
       name = "writing-skills-devshell";
-      # envName and packagePrefix are left at their library defaults:
-      # mkDevshellSkillsFlake derives envName = "agent-skills-${name}"
-      # (== agent-skills-writing-skills-devshell) and packagePrefix
-      # defaults to "agent-skill-", so both equal what was spelled out here.
       sources = [
+        # Commits, branches and pull requests.
         { source = inputs.git-skills; }
+        # Safe shell commands: named deletes, PIDs, no machine-wide changes.
+        { source = inputs.shell-skills; }
+        # Running as a headless session in a checkout, keeping the scratchpad
+        # tidy, the cross-repository plan's graph, and how one skill names
+        # another and reads its preferences files.
+        {
+          source = inputs.coding-agent-skills;
+          skills = [
+            "coding-agent-headless-in-checkout"
+            "coding-agent-plans-as-graph"
+            "coding-agent-scratchpad-scripts"
+            "coding-agent-skill-references"
+          ];
+        }
+        # This repository's own skills, so an agent editing them follows them.
+        { source = inputs.writing-skills; }
+        # Writing skills: skill-creator, superpowers, humanizer, nix-flakes.
         { source = inputs.skillspkgs-combinations.combinations.authoring; }
       ];
     };
