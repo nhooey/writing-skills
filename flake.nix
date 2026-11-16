@@ -98,16 +98,35 @@
 
           apps = base.apps.${system};
 
-          # `nix fmt` runs nixfmt over `.nix` and prettier over `.md` / `.yaml`;
-          # the module also surfaces a `checks.${system}.treefmt` so `nix flake
-          # check` fails on any unformatted file. prettier's includes are pinned
-          # to markdown and YAML so it leaves JSON, such as a skill's
-          # `evals.json`, alone. Add formatters here as other tracked file types
-          # arrive.
+          # `skill-structure` checks every skill under ./skills: frontmatter
+          # name matches the directory, description present and within the
+          # limit, flake.nix builds the same skillName, relative links resolve.
+          # `skill-structure-tests` runs the checker's own unit tests.
+          checks =
+            let
+              runPython =
+                name: script:
+                pkgs.runCommand name {
+                  nativeBuildInputs = [ pkgs.python3 ];
+                  PYTHONDONTWRITEBYTECODE = "1";
+                } "${script}\ntouch $out";
+            in
+            {
+              skill-structure = runPython "skill-structure" "python3 ${./tests/skill_structure.py} ${./skills}";
+              skill-structure-tests = runPython "skill-structure-tests" "python3 -m unittest discover -v -s ${./tests}";
+            };
+
+          # `nix fmt` runs nixfmt over `.nix`, prettier over `.md` / `.yaml`
+          # and ruff over `.py`; the module also surfaces a
+          # `checks.${system}.treefmt` so `nix flake check` fails on any
+          # unformatted file. prettier's includes are pinned to markdown and
+          # YAML so it leaves JSON, such as a skill's `evals.json`, alone. Add
+          # formatters here as other tracked file types arrive.
           treefmt = {
             projectRootFile = "flake.nix";
             programs.nixfmt.enable = true;
             programs.prettier.enable = true;
+            programs.ruff-format.enable = true;
             settings.formatter.prettier.includes = [
               "*.md"
               "*.yaml"
