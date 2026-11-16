@@ -1,6 +1,6 @@
 ---
 name: writing-hygiene-tables-for-comparison
-description: Rewrite prose or lists as a table for one of two reasons, comparison or alignment. Comparison is several items described against the same properties ("X supports A, costs B; Y supports A', costs B'"), so the reader has to align them mentally to choose. Alignment is many parallel label-to-value rows (shortcuts, flags, environment variables, glossary entries) that scan better as columns than as bullets. Covers spotting the item-by-property grid, choosing the axes (items in rows, first column names the item), which properties earn a column (notable, shared, values differ), pulling uniform properties into a list under the table, when not to tabulate, and keeping the table faithful (every cell filled, no invented attributes). Any format: docs, READMEs, decision docs, "X vs Y" sections, PR descriptions, reports. Use when two or more items share the same dimensions, or when the user asks to "compare these", "tabulate this", "show the trade-offs", "which should I pick" or "make a reference table".
+description: Rewrite prose or lists as a table, or reshape an existing table, for one of two reasons, comparison or alignment. Comparison is several items described against the same properties ("X supports A, costs B; Y supports A', costs B'"), which the reader must align in their head. Alignment is many parallel label-to-value rows (shortcuts, flags, environment variables, glossary entries) that scan better as columns. Covers spotting the item-by-property grid, the axes (items in rows, first column names the item), which properties earn a column (notable, shared, values differ), moving uniform properties to a list under the table, fixing items-as-columns tables, when not to tabulate, and keeping the table faithful (every cell filled, nothing invented). Any format: docs, READMEs, decision docs, "X vs Y" sections, PR descriptions, reports. Use when two or more items share the same dimensions, or when the user asks to "compare these", "tabulate this", "show the trade-offs", "which should I pick" or "make a reference table".
 ---
 
 # Tables for comparison
@@ -55,6 +55,9 @@ row faster to find: a dozen shortcuts or every flag of a command.
 
 - **Only one item**: nothing to compare against. One thing's attributes are
   a list or prose.
+- **The reader studies each item on its own** instead of scanning to pick
+  one: a section per item, each read whole, serves that reader better than
+  a grid.
 - **The items share no common properties**: there are no columns to align,
   and the table is mostly empty cells.
 - **Only one property and few rows**: a one-column table is a list with
@@ -179,6 +182,41 @@ under the table, leaving only columns that separate the items. "By
 contrast" disappeared because the contrast is positional. Nothing was
 dropped and nothing invented.
 
+## Reshaping an existing table
+
+A comparison that is already a table can still make the reader work. Check
+it against the rules above:
+
+- **Items as columns, properties as rows**: transpose it, unless it is the
+  few-items, many-properties exception.
+- **A row or column of identical values**: move the property to the list
+  under the table.
+- **A column for a property only one or two items have**: a sentence or a
+  note instead.
+- **One comparison split across several small tables**: merge them, unless
+  the dimensions are genuinely orthogonal.
+
+The same three password managers, tabulated the slow way:
+
+```markdown
+|                    | Bitwarden             | 1Password             | KeePassXC        |
+| ------------------ | --------------------- | --------------------- | ---------------- |
+| License            | GPL-3.0               | Proprietary           | GPL-2.0+         |
+| Self-hostable      | Yes                   | No                    | Yes (local file) |
+| Linux support      | Yes                   | Yes                   | Yes              |
+| macOS support      | Yes                   | Yes                   | Yes              |
+| Windows support    | Yes                   | Yes                   | Yes              |
+| Browser extensions | Yes                   | Yes                   | Via bridge       |
+| Family plan        | Yes ($40/yr, 6 users) | Yes ($60/yr, 5 users) | No               |
+| TOTP support       | Yes                   | Yes                   | Yes              |
+```
+
+Reshaped, it is the After table above: the items moved to rows, and the
+three operating-system rows and TOTP support, the same for every item,
+moved to the shared line. Its cells take the layout in
+`markdown-hygiene-lists-headings-tables`: ✅ or ❌ for the yes/no values,
+a qualifier on a second line, a linked name in the first column.
+
 ## Faithfulness rules: don't let the table lie
 
 - **Fill every cell.** A blank cell is ambiguous: "no", "same as above" or
@@ -211,6 +249,7 @@ dropped and nothing invented.
   (products, libraries, services, tools, plans, options) for a reader
   deciding between them: decision docs, "alternatives" sections, "X vs Y"
   sections, buyer's guides, PR descriptions, reports.
+- Reviewing or updating a comparison that is already a table.
 - Writing reference material with many parallel label-to-value rows.
 - The user asks to compare, tabulate or show trade-offs.
 
