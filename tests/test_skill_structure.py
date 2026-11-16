@@ -1,6 +1,20 @@
+import contextlib
+import io
+import os
+import tempfile
 import unittest
+from pathlib import Path
+from unittest import mock
 
-from skill_structure import parse_frontmatter, relative_links, skill_problems
+from skill_structure import (
+    build_parser,
+    check,
+    default_skills_dir,
+    main,
+    parse_frontmatter,
+    relative_links,
+    skill_problems,
+)
 
 GOOD_MD = """---
 name: demo-skill
@@ -117,6 +131,78 @@ class SkillProblemsTest(unittest.TestCase):
         self.assertEqual(
             found, ["SKILL.md links to 'examples.md', which does not exist"]
         )
+
+
+class ParserTest(unittest.TestCase):
+    def parse(self, *argv):
+        with contextlib.redirect_stderr(io.StringIO()):
+            return build_parser().parse_args(list(argv))
+
+    def test_check_takes_an_optional_skills_dir(self):
+        self.assertIsNone(self.parse("check").skills_dir)
+        self.assertEqual(self.parse("check", "elsewhere").skills_dir, Path("elsewhere"))
+
+    def test_a_command_is_required(self):
+        with self.assertRaises(SystemExit) as raised:
+            self.parse()
+        self.assertEqual(raised.exception.code, 2)
+
+    def test_unknown_command_is_rejected(self):
+        with self.assertRaises(SystemExit) as raised:
+            self.parse("lint")
+        self.assertEqual(raised.exception.code, 2)
+
+    def test_help_lists_the_check_command(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), self.assertRaises(SystemExit):
+            build_parser().parse_args(["--help"])
+        self.assertIn("check", out.getvalue())
+
+    def test_default_skills_dir_follows_prj_root(self):
+        with mock.patch.dict(os.environ, {"PRJ_ROOT": "/repo"}):
+            self.assertEqual(default_skills_dir(), Path("/repo/skills"))
+        with mock.patch.dict(os.environ, clear=True):
+            self.assertEqual(default_skills_dir(), Path("skills"))
+
+
+class CheckTest(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.tmp = Path(tmp.name)
+
+    def write_skill(self, name, md=GOOD_MD, flake=GOOD_FLAKE):
+        skill = self.tmp / name
+        skill.mkdir()
+        (skill / "SKILL.md").write_text(md)
+        (skill / "flake.nix").write_text(flake)
+        (skill / "examples.md").write_text("")
+
+    def run_check(self, *argv):
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            status = main(["check", *argv])
+        return status, out.getvalue(), err.getvalue()
+
+    def test_well_formed_skills_pass(self):
+        self.write_skill("demo-skill")
+        status, out, err = self.run_check(str(self.tmp))
+        self.assertEqual((status, out, err), (0, "1 skills well formed\n", ""))
+
+    def test_a_malformed_skill_fails_and_names_itself(self):
+        self.write_skill("demo-skill")
+        self.write_skill("other-skill")
+        status, _, err = self.run_check(str(self.tmp))
+        self.assertEqual(status, 1)
+        self.assertIn("other-skill: frontmatter name", err)
+        self.assertNotIn("demo-skill:", err)
+
+    def test_empty_skills_dir_fails(self):
+        self.assertEqual(self.run_check(str(self.tmp))[0], 1)
+
+    def test_missing_skills_dir_is_a_usage_error(self):
+        with contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(check(self.tmp / "absent"), 2)
 
 
 if __name__ == "__main__":
