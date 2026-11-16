@@ -7,65 +7,51 @@ description: Refer to each thing defined elsewhere (an issue, pull request, comm
 
 _Each thing defined elsewhere has one canonical label, used word for word every time, with its machine identifiers in parentheses after it and a link when it has an address._
 
-Writers refer to things by the identifier they happen to have in hand: a
-bare pull request number (#206), a branch name
-(`up/22-bats-copy-path-macos`), a short SHA (`8127188`), an event by its
-date ("the 2026-10-16 comment"). To the writer each is unambiguous. To the
-reader each is a lookup: open the tracker, search the log, scroll the
-thread, then come back and find their place. Three of those in one
-paragraph and the reader stops following.
+Writers refer to things by the identifier they happen to have in hand: a bare pull request number (#206), a branch name (`up/22-bats-copy-path-macos`), a short SHA (`8127188`), an event by its date ("the 2026-10-16 comment").
+To the writer each is unambiguous.
+To the reader each is a lookup: open the tracker, search the log, scroll the thread, then come back and find their place.
+Three of those in one paragraph and the reader stops following.
 
 ## Choosing the canonical label
 
-- **Use the label the thing already has where the reader would look.** An
-  issue or pull request: its title. A commit: its subject line. A section
-  of a document: its heading. A person: their name. A file: its title, or
-  its name when it has no title.
-- **Several candidates: pick the one the reader sees where they'd look.** A
-  pull request has a number, a branch and a title; the reader looking at
-  the tracker sees the title, so the title is the label, not the branch.
-- **None: coin a short descriptive name at first mention.** "The macOS copy
-  fix", "the flaky-login investigation". From then on that coined name is
-  canonical: use it exactly, don't drift to a synonym.
+- **Use the label the thing already has where the reader would look.**
+  An issue or pull request: its title.
+  A commit: its subject line.
+  A section of a document: its heading.
+  A person: their name.
+  A file: its title, or its name when it has no title.
+- **Several candidates: pick the one the reader sees where they'd look.**
+  A pull request has a number, a branch and a title; the reader looking at the tracker sees the title, so the title is the label, not the branch.
+- **None: coin a short descriptive name at first mention.**
+  "The macOS copy fix", "the flaky-login investigation".
+  From then on that coined name is canonical: use it exactly, don't drift to a synonym.
 
 ### The only variation: truncation
 
-A long label may be cut at a word boundary, marked with `…`:
-#206 "Fix new_project.bats on macOS…". Never paraphrase, abbreviate or
-reorder it; the reader should be able to search for the words and find the
-thing.
+A long label may be cut at a word boundary, marked with `…`: #206 "Fix new_project.bats on macOS…".
+Never paraphrase, abbreviate or reorder it; the reader should be able to search for the words and find the thing.
 
 ## Rules for using it
 
-- **Machine identifiers go after the label, in parentheses, never in its
-  place.** Numbers, branch names, SHAs, paths and dates help the reader
-  find the thing once they know what it is; they don't tell them what it
-  is. Branch names read especially badly: dashes, slashes and underscores
-  in place of words. A GitHub issue, pull request or commit is the one
-  exception: its number or short SHA leads, as in
-  `#206 "Fix new_project.bats on macOS…"`, the form
-  `github-hygiene-refer-to-issues-and-pull-requests` sets out, since
-  GitHub renders and links the number.
-- **An acronym comes first, its expansion after it in parentheses, at its
-  first use in a text:** CRP (C-reactive protein). Don't coin an acronym
-  where none is in common use.
-- **Name an event by what happened, with the date after it.** "The
-  maintainer's reply agreeing to Q2 and Q3 (2026-10-16)", not "the
-  2026-10-16 comment".
-- **Anything with an address is a link**, so the label itself is clickable:
-  an issue's URL, a commit's page, a file's path in the repository, a
-  message's permalink.
-- **No vague pointers back.** "The fix above", "those PRs", "that branch",
-  "the earlier issue": repeat the canonical label instead. The reader may
-  have skipped "above", and in a long text "those" has several candidates.
-- **The same label every time.** Don't call it "the macOS fix" in one
-  paragraph, "the bats patch" in the next and "#206" in the third. Three
-  names read as three things.
+- **Machine identifiers go after the label, in parentheses, never in its place.**
+  Numbers, branch names, SHAs, paths and dates help the reader find the thing once they know what it is; they don't tell them what it is.
+  Branch names read especially badly: dashes, slashes and underscores in place of words.
+  A GitHub issue, pull request or commit is the one exception: its number or short SHA leads, as in `#206 "Fix new_project.bats on macOS…"`, the form `github-hygiene-refer-to-issues-and-pull-requests` sets out, since GitHub renders and links the number.
+- **An acronym comes first, its expansion after it in parentheses, at its first use in a text:** CRP (C-reactive protein).
+  Don't coin an acronym where none is in common use.
+- **Name an event by what happened, with the date after it.**
+  "The maintainer's reply agreeing to Q2 and Q3 (2026-10-16)", not "the 2026-10-16 comment".
+- **Anything with an address is a link**, so the label itself is clickable: an issue's URL, a commit's page, a file's path in the repository, a message's permalink.
+- **No vague pointers back.**
+  "The fix above", "those PRs", "that branch", "the earlier issue": repeat the canonical label instead.
+  The reader may have skipped "above", and in a long text "those" has several candidates.
+- **The same label every time.**
+  Don't call it "the macOS fix" in one paragraph, "the bats patch" in the next and "#206" in the third.
+  Three names read as three things.
 
 ## Before and after
 
-Links below are written in Markdown; use the link form of whatever format
-you're writing in.
+Links below are written in Markdown; use the link form of whatever format you're writing in.
 
 ### Issues and pull requests
 
@@ -101,8 +87,7 @@ I pushed the fix and opened
 (branch `up/22-bats-copy-path-macos`).
 ```
 
-The branch is a detail of the pull request, so it goes in parentheses after
-the pull request's label, never as the reference itself.
+The branch is a detail of the pull request, so it goes in parentheses after the pull request's label, never as the reference itself.
 
 ### Commits
 
@@ -170,8 +155,7 @@ with a backup" is safer than "dump and restore". The "Rename the config
 loader" change is still uncommitted.
 ```
 
-A turn number or "earlier" makes the reader scroll back; the option's own
-name and the change's own name don't.
+A turn number or "earlier" makes the reader scroll back; the option's own name and the change's own name don't.
 
 ### List items and kanban items
 
@@ -188,8 +172,8 @@ After:
 README" (item 5), which was waiting on it, moved to Todo.
 ```
 
-Numbers change when a list is reordered or regenerated; the item's text
-doesn't. Keep the number only as a parenthetical aid.
+Numbers change when a list is reordered or regenerated; the item's text doesn't.
+Keep the number only as a parenthetical aid.
 
 ### Vague pointers
 
@@ -202,41 +186,29 @@ The fix above also needs those PRs merged first.
 After:
 
 ```text
-"Copy paths with cp -R on macOS" also needs "Add a portable copy_path
-helper" (#198) and "Pin bats to 1.11" (#201) merged first.
+"Copy paths with cp -R on macOS" also needs #198 "Add a portable
+copy_path helper" and #201 "Pin bats to 1.11" merged first.
 ```
 
 ## When to apply
 
-The narrower the reader's context (someone arriving from a notification, a
-reviewer skimming, the user returning after a break), the more each label
-saves them.
+The narrower the reader's context (someone arriving from a notification, a reviewer skimming, the user returning after a break), the more each label saves them.
 
-- Writing any sentence that mentions an issue, pull request, commit,
-  branch, file, document, person, event, earlier message or list item, in
-  any prose: status reports, pull request bodies, commit messages, issue
-  comments, replies, code review comments, docs, release notes, and an
-  agent's progress updates and turn summaries.
-- Reviewing text that uses bare numbers, SHAs, branch names, paths or dates
-  as references, or points back with "above", "those" or "that".
-- Coining a name for something that has none: use it identically from then
-  on.
+- Writing any sentence that mentions an issue, pull request, commit, branch, file, document, person, event, earlier message or list item, in any prose: status reports, pull request bodies, commit messages, issue comments, replies, code review comments, docs, release notes, and an agent's progress updates and turn summaries.
+- Reviewing text that uses bare numbers, SHAs, branch names, paths or dates as references, or points back with "above", "those" or "that".
+- Coining a name for something that has none: use it identically from then on.
 
 ## Your preferences
 
 !`cat "${CLAUDE_SKILL_DIR}/../writing-hygiene-refer-by-canonical-label.preferences.md" "${CLAUDE_PROJECT_DIR}/.agents/skills/writing-hygiene-refer-by-canonical-label.preferences.md" 2>/dev/null || true`
 
-If your agent doesn't run the line above, read these files yourself if they
-exist: `writing-hygiene-refer-by-canonical-label.preferences.md` next to this skill's folder, then
-`.agents/skills/writing-hygiene-refer-by-canonical-label.preferences.md` in the project. A project's
-file overrides the user's, and the user's overrides this skill's defaults.
+If your agent doesn't run the line above, read these files yourself if they exist: `writing-hygiene-refer-by-canonical-label.preferences.md` next to this skill's folder, then `.agents/skills/writing-hygiene-refer-by-canonical-label.preferences.md` in the project.
+A project's file overrides the user's, and the user's overrides this skill's defaults.
 
 ## Related skills
 
-When one of these applies and it's in your skill listing, load it
-without asking. If it isn't in your listing, tell the user which skill is
-missing and ask whether to install it from the same collection this skill
-came from; don't apply it from memory.
+When one of these applies and it's in your skill listing, load it without asking.
+If it isn't in your listing, tell the user which skill is missing and ask whether to install it from the same collection this skill came from; don't apply it from memory.
 
 - `github-hygiene-refer-to-issues-and-pull-requests`: this rule applied to GitHub: issue and pull request titles, cross-repo references, commit SHAs with subjects, fetching labels with `gh`.
 - `coding-agent-skill-references`: the preferences files this skill reads.
