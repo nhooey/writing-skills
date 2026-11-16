@@ -202,8 +202,8 @@ The fix above also needs those PRs merged first.
 After:
 
 ```text
-"Copy paths with cp -R on macOS" also needs "Add a portable copy_path
-helper" (#198) and "Pin bats to 1.11" (#201) merged first.
+"Copy paths with cp -R on macOS" also needs #198 "Add a portable
+copy_path helper" and #201 "Pin bats to 1.11" merged first.
 ```
 
 ## When to apply
