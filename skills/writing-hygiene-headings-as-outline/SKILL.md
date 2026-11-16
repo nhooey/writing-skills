@@ -61,10 +61,11 @@ finish, it doesn't need headings.
    candidate section boundary.
 2. **Assign levels by hierarchy, not by size.** One top-level heading is the
    document's title; demote any other top-level topic to a section, since
-   several top-level headings flatten the outline. Major topics are the next level down; a topic's own
-   sub-points are the level below that. The level encodes containment (a
-   child heading is part of its parent's topic), not how long the section
-   is.
+   several top-level headings flatten the outline and confuse
+   table-of-contents tools. Major topics are the next level down; a
+   topic's own sub-points are the level below that. The level encodes
+   containment (a child heading is part of its parent's topic), not how
+   long the section is.
 3. **Don't skip levels.** Go from a section straight to its sub-section,
    never from a section to a sub-sub-section. A skipped level breaks the
    outline and most table-of-contents generators.
