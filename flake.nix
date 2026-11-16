@@ -93,28 +93,36 @@
       };
       perSystem =
         { system, pkgs, ... }:
+        let
+          # `skill-structure check [SKILLS_DIR]` checks every skill under
+          # ./skills: frontmatter name matches the directory, description
+          # present and within the limit, flake.nix builds the same
+          # skillName, relative links resolve. The script stays in its own
+          # file beside its unit tests; this only puts it on PATH.
+          skill-structure = pkgs.writeShellApplication {
+            name = "skill-structure";
+            runtimeInputs = [ pkgs.python3 ];
+            runtimeEnv.PYTHONDONTWRITEBYTECODE = "1";
+            text = ''exec python3 ${./tests/skill_structure.py} "$@"'';
+          };
+        in
         {
           packages = base.packages.${system};
 
           apps = base.apps.${system};
 
-          # `skill-structure` checks every skill under ./skills: frontmatter
-          # name matches the directory, description present and within the
-          # limit, flake.nix builds the same skillName, relative links resolve.
-          # `skill-structure-tests` runs the checker's own unit tests.
-          checks =
-            let
-              runPython =
-                name: script:
-                pkgs.runCommand name {
-                  nativeBuildInputs = [ pkgs.python3 ];
-                  PYTHONDONTWRITEBYTECODE = "1";
-                } "${script}\ntouch $out";
-            in
-            {
-              skill-structure = runPython "skill-structure" "python3 ${./tests/skill_structure.py} ${./skills}";
-              skill-structure-tests = runPython "skill-structure-tests" "python3 -m unittest discover -v -s ${./tests}";
-            };
+          # `skill-structure` runs the dev shell's `skill-structure check`
+          # over ./skills; `skill-structure-tests` runs the checker's own
+          # unit tests.
+          checks = {
+            skill-structure = pkgs.runCommand "skill-structure" {
+              nativeBuildInputs = [ skill-structure ];
+            } "skill-structure check ${./skills}\ntouch $out";
+            skill-structure-tests = pkgs.runCommand "skill-structure-tests" {
+              nativeBuildInputs = [ pkgs.python3 ];
+              PYTHONDONTWRITEBYTECODE = "1";
+            } "python3 -m unittest discover -v -s ${./tests}\ntouch $out";
+          };
 
           # `nix fmt` runs nixfmt over `.nix`, prettier over `.md` / `.yaml`
           # and ruff over `.py`; the module also surfaces a
@@ -138,9 +146,16 @@
           # name, motd, the install-skills startup that reconciles the runtime
           # `skills-devshell/` sub-flake at project scope, the ci/dev/maintenance
           # command trio (check / fmt / update-flake), and the skills commands
-          # (reap-skills / update-skills-devshell). This repo adds no dev-shell
-          # packages or commands of its own, so there is no `devshells.default`
-          # block here.
+          # (reap-skills / update-skills-devshell). The commands below
+          # concatenate onto that list.
+          devshells.default.commands = [
+            {
+              category = "ci";
+              name = "skill-structure";
+              help = "Check every skill's frontmatter, flake.nix skillName and links";
+              package = skill-structure;
+            }
+          ];
         };
     };
 }

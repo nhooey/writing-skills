@@ -9,9 +9,12 @@ For each `skills/<dir>/`:
 - Every relative link in `SKILL.md` outside a code fence names a file
   that exists in the skill directory.
 
-Usage: python3 skill_structure.py <skills-dir>
+Run as `skill-structure check [SKILLS_DIR]` from the dev shell; see
+`skill-structure --help`.
 """
 
+import argparse
+import os
 import posixpath
 import re
 import sys
@@ -134,11 +137,39 @@ def read_or_none(path):
     return path.read_text(encoding="utf-8") if path.is_file() else None
 
 
-def main(argv):
-    if len(argv) != 2:
-        print(__doc__.strip().splitlines()[-1], file=sys.stderr)
+def default_skills_dir():
+    """Return the repository's `skills/`: under `$PRJ_ROOT` in the dev shell."""
+    return Path(os.environ.get("PRJ_ROOT", ".")) / "skills"
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(
+        prog="skill-structure",
+        description="Check the skills in this repository for well-formed structure.",
+    )
+    commands = parser.add_subparsers(dest="command", metavar="COMMAND", required=True)
+    check = commands.add_parser(
+        "check",
+        help="check every skill under a skills directory",
+        description=__doc__.strip().split("\n\nRun as")[0],
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    check.add_argument(
+        "skills_dir",
+        metavar="SKILLS_DIR",
+        nargs="?",
+        type=Path,
+        help="directory holding one subdirectory per skill "
+        "(default: $PRJ_ROOT/skills, or ./skills outside the dev shell)",
+    )
+    return parser
+
+
+def check(skills_dir):
+    """Print each skill's problems; return the exit status."""
+    if not skills_dir.is_dir():
+        print(f"{skills_dir} is not a directory", file=sys.stderr)
         return 2
-    skills_dir = Path(argv[1])
     skill_dirs = sorted(p for p in skills_dir.iterdir() if p.is_dir())
     if not skill_dirs:
         print(f"no skills found under {skills_dir}", file=sys.stderr)
@@ -160,5 +191,12 @@ def main(argv):
     return 1 if failed else 0
 
 
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+    if args.command == "check":
+        return check(args.skills_dir or default_skills_dir())
+    raise AssertionError(f"unhandled command {args.command!r}")
+
+
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    sys.exit(main())
