@@ -32,7 +32,9 @@ def parse_frontmatter(text):
     """Return the frontmatter's top-level keys as a dict, or None.
 
     Understands the subset skills use: `key: value` lines, quoted values,
-    and block scalars (`>`, `|`) whose lines are indented under the key.
+    block scalars (`>`, `|`), and plain or quoted values continued on
+    lines indented under the key. Continuation lines are joined with
+    single spaces.
     """
     lines = text.splitlines()
     if not lines or lines[0].strip() != "---":
@@ -42,23 +44,27 @@ def parse_frontmatter(text):
     except StopIteration:
         return None
     fields = {}
+    block_keys = set()
     key = None
-    block = False
     for line in lines[1:end]:
-        if block and (line.startswith((" ", "\t")) or not line.strip()):
+        if key is not None and (line.startswith((" ", "\t")) or not line.strip()):
             fields[key] = (fields[key] + " " + line.strip()).strip()
             continue
-        block = False
         match = re.match(r"^([A-Za-z0-9_-]+):\s*(.*)$", line)
         if not match:
+            key = None
             continue
         key, value = match.group(1), match.group(2).strip()
         if value in (">", "|", ">-", "|-", ""):
             fields[key] = ""
-            block = True
+            block_keys.add(key)
         else:
-            fields[key] = unquote(value)
-    return fields
+            fields[key] = value
+            block_keys.discard(key)
+    return {
+        name: value if name in block_keys else unquote(value)
+        for name, value in fields.items()
+    }
 
 
 def unquote(value):

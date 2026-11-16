@@ -55,6 +55,18 @@ class ParseFrontmatterTest(unittest.TestCase):
         )
         self.assertEqual(fields["description"], "first line second line")
 
+    def test_joins_a_plain_value_continued_on_indented_lines(self):
+        fields = parse_frontmatter(
+            "---\nname: a\ndescription: first part\n  continued here\n---\n"
+        )
+        self.assertEqual(fields["description"], "first part continued here")
+
+    def test_joins_a_quoted_value_continued_on_indented_lines(self):
+        fields = parse_frontmatter(
+            '---\nname: a\ndescription: "Quoted: first\n  then more"\n---\n'
+        )
+        self.assertEqual(fields["description"], "Quoted: first then more")
+
     def test_none_without_an_opening_fence(self):
         self.assertIsNone(parse_frontmatter("name: a\n---\n"))
 
@@ -115,6 +127,14 @@ class SkillProblemsTest(unittest.TestCase):
         self.assertEqual(
             problems(md=over),
             ["frontmatter description is 1025 characters, over the 1024 limit"],
+        )
+
+    def test_over_long_description_wrapped_over_lines_fails(self):
+        wrapped = "\n  ".join(["x" * 100] * 11)
+        found = problems(md=GOOD_MD.replace("Does one thing well.", wrapped))
+        self.assertEqual(
+            found,
+            ["frontmatter description is 1110 characters, over the 1024 limit"],
         )
 
     def test_missing_flake(self):
