@@ -25,7 +25,8 @@ NAME_MAX = 64
 DESCRIPTION_MAX = 1024
 LINK_PATTERN = re.compile(r"\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 SKILL_NAME_IN_FLAKE = re.compile(r'skillName\s*=\s*"([^"]*)"\s*;')
-FENCE_PATTERN = re.compile(r"^\s*(```|~~~)")
+FENCE_PATTERN = re.compile(r"^\s*(`{3,}|~{3,})")
+REFERENCE_DEFINITION_PATTERN = re.compile(r"^ {0,3}\[[^\]]+\]:\s*<?([^>\s]+)>?")
 
 
 def parse_frontmatter(text):
@@ -76,15 +77,25 @@ def unquote(value):
 def relative_links(text):
     """Return the link targets outside code fences that point at local files."""
     targets = []
-    in_fence = False
+    fence = None
     for line in text.splitlines():
-        if FENCE_PATTERN.match(line):
-            in_fence = not in_fence
+        opening = FENCE_PATTERN.match(line)
+        if fence is None and opening:
+            fence = opening.group(1)
             continue
-        if in_fence:
+        if fence is not None:
+            closing = re.match(r"^\s*(`{3,}|~{3,})\s*$", line)
+            if (
+                closing
+                and closing.group(1)[0] == fence[0]
+                and len(closing.group(1)) >= len(fence)
+            ):
+                fence = None
             continue
         line = re.sub(r"`[^`]*`", "", line)
-        for target in LINK_PATTERN.findall(line):
+        definition = REFERENCE_DEFINITION_PATTERN.match(line)
+        found = [definition.group(1)] if definition else LINK_PATTERN.findall(line)
+        for target in found:
             if re.match(r"^[a-z][a-z0-9+.-]*:", target) or target.startswith("#"):
                 continue
             path = target.split("#", 1)[0]

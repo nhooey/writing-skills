@@ -83,6 +83,14 @@ class RelativeLinksTest(unittest.TestCase):
         text = "```markdown\n[x](missing.md)\n```\n`[y](also-missing.md)`\n[z](z.md)\n"
         self.assertEqual(relative_links(text), ["z.md"])
 
+    def test_a_shorter_fence_inside_a_longer_one_does_not_close_it(self):
+        text = "````markdown\n```\n[x](missing.md)\n```\n````\n[y](y.md)\n"
+        self.assertEqual(relative_links(text), ["y.md"])
+
+    def test_keeps_local_reference_definitions(self):
+        text = "See [a][ref].\n\n[ref]: refs/a.md\n[web]: https://x.org\n"
+        self.assertEqual(relative_links(text), ["refs/a.md"])
+
 
 class SkillProblemsTest(unittest.TestCase):
     def test_well_formed_skill_has_no_problems(self):
