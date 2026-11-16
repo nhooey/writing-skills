@@ -62,8 +62,8 @@
         # skillspkgs / nur-packages' last-write-wins `//` merge; the
         # owner+topic name is resolvable and unique, mirroring git-skills's
         # `agent-skills-nhooey-git-all`. The aggregate carries the home-manager
-        # `isFlakeSkillsEnv` passthru itself (agent-skill-flake #47), so
-        # `default` is directly installable — no hand-rolled pack.
+        # `isFlakeSkillsEnv` passthru itself, so `default` is directly
+        # installable.
         name = "agent-skills-nhooey-writing-all";
       };
     in
@@ -93,20 +93,48 @@
       };
       perSystem =
         { system, pkgs, ... }:
+        let
+          # `skill-structure check [SKILLS_DIR]` checks every skill under
+          # ./skills: frontmatter name matches the directory, description
+          # present and within the limit, flake.nix builds the same
+          # skillName, relative links resolve. The script stays in its own
+          # file beside its unit tests; this only puts it on PATH.
+          skill-structure = pkgs.writeShellApplication {
+            name = "skill-structure";
+            runtimeInputs = [ pkgs.python3 ];
+            runtimeEnv.PYTHONDONTWRITEBYTECODE = "1";
+            text = ''exec python3 ${./tests/skill_structure.py} "$@"'';
+          };
+        in
         {
           packages = base.packages.${system};
 
           apps = base.apps.${system};
 
-          # `nix fmt` runs nixfmt over `.nix` and prettier over `.md` / `.yaml`;
-          # the module also surfaces a `checks.${system}.treefmt` so `nix flake
-          # check` fails on any unformatted file. prettier's includes are pinned
-          # to markdown and YAML so it leaves `evals.json` (and any future JSON)
-          # alone — add formatters here as other tracked file types arrive.
+          # `skill-structure` runs the dev shell's `skill-structure check`
+          # over ./skills; `skill-structure-tests` runs the checker's own
+          # unit tests.
+          checks = {
+            skill-structure = pkgs.runCommand "skill-structure" {
+              nativeBuildInputs = [ skill-structure ];
+            } "skill-structure check ${./skills}\ntouch $out";
+            skill-structure-tests = pkgs.runCommand "skill-structure-tests" {
+              nativeBuildInputs = [ pkgs.python3 ];
+              PYTHONDONTWRITEBYTECODE = "1";
+            } "python3 -m unittest discover -v -s ${./tests}\ntouch $out";
+          };
+
+          # `nix fmt` runs nixfmt over `.nix`, prettier over `.md` / `.yaml`
+          # and ruff over `.py`; the module also surfaces a
+          # `checks.${system}.treefmt` so `nix flake check` fails on any
+          # unformatted file. prettier's includes are pinned to markdown and
+          # YAML so it leaves JSON, such as a skill's `evals.json`, alone. Add
+          # formatters here as other tracked file types arrive.
           treefmt = {
             projectRootFile = "flake.nix";
             programs.nixfmt.enable = true;
             programs.prettier.enable = true;
+            programs.ruff-format.enable = true;
             settings.formatter.prettier.includes = [
               "*.md"
               "*.yaml"
@@ -118,9 +146,16 @@
           # name, motd, the install-skills startup that reconciles the runtime
           # `skills-devshell/` sub-flake at project scope, the ci/dev/maintenance
           # command trio (check / fmt / update-flake), and the skills commands
-          # (reap-skills / update-skills-devshell). This repo adds no dev-shell
-          # packages or commands of its own, so there is no `devshells.default`
-          # block here.
+          # (reap-skills / update-skills-devshell). The commands below
+          # concatenate onto that list.
+          devshells.default.commands = [
+            {
+              category = "ci";
+              name = "skill-structure";
+              help = "Check every skill's frontmatter, flake.nix skillName and links";
+              package = skill-structure;
+            }
+          ];
         };
     };
 }

@@ -48,7 +48,8 @@ Package outputs:
 ## Development
 
 ```bash
-nix develop      # enter the dev shell; run `menu` to list commands
-nix fmt          # nixfmt over *.nix, prettier over *.md / *.yaml
-nix flake check  # runs the treefmt check (fails on any unformatted file)
+nix develop            # enter the dev shell; run `menu` to list commands
+fmt                    # nixfmt over *.nix, prettier over *.md / *.yaml, ruff over *.py
+check                  # nix flake check: formatting, skill structure and its unit tests
+skill-structure check  # check every skill's frontmatter, skillName and links
 ```
