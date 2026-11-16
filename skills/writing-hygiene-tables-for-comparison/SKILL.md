@@ -1,44 +1,20 @@
 ---
 name: writing-hygiene-tables-for-comparison
-description: |
-  Rewrite prose or lists as a table for one of two reasons: comparison or
-  alignment. Comparison: several items described against the same
-  properties ("X supports A, costs B; Y supports A', costs B'"), so the
-  reader has to align them mentally to choose. Alignment: many parallel
-  label-to-value rows (shortcuts, flags, environment variables, glossary
-  entries) that scan better as columns than as bullets. Covers spotting the
-  item-by-property grid, choosing the axes (items in rows, first column
-  names the item), which properties earn a column (notable, shared, values
-  differ), pulling uniform properties into a list under the table, when not
-  to tabulate, and keeping the table faithful (every cell filled, no
-  invented attributes). Any format: docs, READMEs, decision docs, "X vs Y"
-  sections, PR descriptions, reports. Use when two or more items share the
-  same dimensions, or when the user asks to "compare these", "tabulate
-  this", "show the trade-offs", "which should I pick" or "make a reference
-  table".
-tags: [writing, structure]
+description: Rewrite prose or lists as a table for one of two reasons, comparison or alignment. Comparison is several items described against the same properties ("X supports A, costs B; Y supports A', costs B'"), so the reader has to align them mentally to choose. Alignment is many parallel label-to-value rows (shortcuts, flags, environment variables, glossary entries) that scan better as columns than as bullets. Covers spotting the item-by-property grid, choosing the axes (items in rows, first column names the item), which properties earn a column (notable, shared, values differ), pulling uniform properties into a list under the table, when not to tabulate, and keeping the table faithful (every cell filled, no invented attributes). Any format: docs, READMEs, decision docs, "X vs Y" sections, PR descriptions, reports. Use when two or more items share the same dimensions, or when the user asks to "compare these", "tabulate this", "show the trade-offs", "which should I pick" or "make a reference table".
 ---
 
-# writing-hygiene-tables-for-comparison
+# Tables for comparison
+
+_Items described against the same properties are a table written as prose. Put the items in rows and only the properties that tell them apart in columns._
 
 When you describe several items and keep mentioning the _same_ attributes
-for each, you've written a table in prose form. The reader has to align it
-in their head, scanning paragraph three to find what paragraph one said
-about cost. A table aligns it on the page: items down one axis, shared
-properties across the other, every comparison a glance instead of a search.
-A good comparison table lets a reader find the answer in seconds, because
-it shows only what distinguishes the items.
+for each, the reader has to align them in their head, scanning paragraph
+three to find what paragraph one said about cost. A table aligns them on
+the page, every comparison a glance instead of a search.
 
-This skill covers when to tabulate and what goes in the table, in any
-format. Table syntax in a given format (Markdown pipes and alignment, line
-breaks inside a cell, yes/no symbols, a linked first column) is in
+Table syntax in a given format (Markdown pipes and alignment, line breaks
+inside a cell, yes/no symbols, a linked first column) is in
 `markdown-hygiene-lists-headings-tables`.
-
-## How to load this skill
-
-Passive reference. Loading it doesn't mean the user wants a table now; it
-means that when you compare things in writing, you'll shape the comparison
-as a table.
 
 ## When this applies
 
@@ -155,8 +131,7 @@ version-specific behavior, caveats) go in prose or notes beneath it.
    for more than one item, then keep the ones that pass the column test
    above. Uniform ones go to the list under the table.
 3. **Fill the grid.** For each item and property, take the value from the
-   source. If the source doesn't say, write an explicit "—" or "N/A"; never
-   leave a cell blank and never invent a value.
+   source, as the faithfulness rules below say.
 4. **Clip cells to scannable values.** A number, a word, a yes/no, a short
    phrase. Push real explanation into a qualifier under the value or a note
    beneath the table.
@@ -239,6 +214,15 @@ dropped and nothing invented.
 - Writing reference material with many parallel label-to-value rows.
 - The user asks to compare, tabulate or show trade-offs.
 
+## Your preferences
+
+!`cat "${CLAUDE_SKILL_DIR}/../writing-hygiene-tables-for-comparison.preferences.md" "${CLAUDE_PROJECT_DIR}/.agents/skills/writing-hygiene-tables-for-comparison.preferences.md" 2>/dev/null || true`
+
+If your agent doesn't run the line above, read these files yourself if they
+exist: `writing-hygiene-tables-for-comparison.preferences.md` next to this skill's folder, then
+`.agents/skills/writing-hygiene-tables-for-comparison.preferences.md` in the project. A project's
+file overrides the user's, and the user's overrides this skill's defaults.
+
 ## Related skills
 
 When one of these applies and it's in your skill listing, load it
@@ -249,3 +233,4 @@ came from; don't apply it from memory.
 - `markdown-hygiene-lists-headings-tables`: Markdown syntax for tables: pipes and alignment, `<br/>` inside cells, ✅/❌ cells, a hyperlinked first column.
 - `writing-hygiene-prose-to-lists`: when the items don't share properties, or there is only one property and few rows, a list instead of a table.
 - `writing-hygiene-refer-by-canonical-label`: naming each item by its canonical label and linking it.
+- `coding-agent-skill-references`: the preferences files this skill reads.

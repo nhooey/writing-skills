@@ -1,38 +1,16 @@
 ---
 name: writing-hygiene-prose-to-lists
-description: |
-  Rewrite run-on sentences that pile clauses behind commas, semicolons and
-  "and"/"or" as nested lists when the prose is really an enumeration, a
-  hierarchy or a set of parallel options. Covers how to tell a list in
-  disguise from genuine prose, how to map comma, semicolon and colon
-  structure onto list nesting, when not to convert (narrative, a short pair,
-  a short sequence that reads fine inline, a one-line summary), and how to
-  keep the rewrite faithful (no dropped items, no invented hierarchy). Any
-  format: docs, READMEs, PR descriptions, commit bodies, release notes,
-  reports, replies. Use when a sentence enumerates three or more items,
-  hides sub-items behind its commas or strings parallel clauses together, or
-  when the user asks to "condense", "clean up", "make this scannable",
-  "break up this wall of text" or "use lists here".
-tags: [writing, structure]
+description: Rewrite run-on sentences that pile clauses behind commas, semicolons and "and"/"or" as nested lists when the prose is really an enumeration, a hierarchy or a set of parallel options. Covers how to tell a list in disguise from genuine prose, how to map comma, semicolon and colon structure onto list nesting, when not to convert (narrative, a short pair, a short sequence that reads fine inline, a one-line summary), and how to keep the rewrite faithful (no dropped items, no invented hierarchy). Any format: docs, READMEs, PR descriptions, commit bodies, release notes, reports, replies. Use when a sentence enumerates three or more items, hides sub-items behind its commas or strings parallel clauses together, or when the user asks to "condense", "clean up", "make this scannable", "break up this wall of text" or "use lists here".
 ---
 
-# writing-hygiene-prose-to-lists
+# Prose to lists
 
-A run-on sentence that enumerates things is a list wearing prose clothing.
+_A run-on sentence that enumerates things is a list written as prose. Rewrite it as a nested list where it really is one, and leave genuine prose alone._
+
 Commas, semicolons and a trailing "and" do the job that list items and
 indentation do better: making each item visible, countable and skimmable.
-This skill spots those sentences and rewrites them as nested lists, **where
-appropriate**, which is the load-bearing qualifier.
-
-It covers when and why to make a list, in any format. The syntax of a list
-in a given format (Markdown indentation, line breaks inside an item) is in
-`markdown-hygiene-lists-headings-tables`.
-
-## How to load this skill
-
-Passive reference. Loading it doesn't mean the user wants a document
-rewritten now; it means that when you write or edit prose, you'll notice
-the lists hiding in it.
+The syntax of a list in a given format (Markdown indentation, line breaks
+inside an item) is in `markdown-hygiene-lists-headings-tables`.
 
 ## When this applies
 
@@ -153,6 +131,15 @@ prose implied.
 - Reviewing text where a sentence enumerates three or more parallel items.
 - The user asks to condense, clean up or make text scannable.
 
+## Your preferences
+
+!`cat "${CLAUDE_SKILL_DIR}/../writing-hygiene-prose-to-lists.preferences.md" "${CLAUDE_PROJECT_DIR}/.agents/skills/writing-hygiene-prose-to-lists.preferences.md" 2>/dev/null || true`
+
+If your agent doesn't run the line above, read these files yourself if they
+exist: `writing-hygiene-prose-to-lists.preferences.md` next to this skill's folder, then
+`.agents/skills/writing-hygiene-prose-to-lists.preferences.md` in the project. A project's
+file overrides the user's, and the user's overrides this skill's defaults.
+
 ## Related skills
 
 When one of these applies and it's in your skill listing, load it
@@ -162,3 +149,4 @@ came from; don't apply it from memory.
 
 - `markdown-hygiene-lists-headings-tables`: Markdown syntax for lists: nesting indents, numbered lists, hard line breaks inside an item.
 - `writing-hygiene-tables-for-comparison`: when the items all share the same properties, a table instead of a list.
+- `coding-agent-skill-references`: the preferences files this skill reads.

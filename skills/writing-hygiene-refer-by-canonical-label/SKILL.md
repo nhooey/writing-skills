@@ -1,23 +1,11 @@
 ---
 name: writing-hygiene-refer-by-canonical-label
-description: |
-  Refer to each thing defined elsewhere (an issue, pull request, commit,
-  branch, file, document, person, event, earlier message or list item) by
-  one canonical label, used word for word every time, never by a cryptic
-  identifier alone: no bare "#206", branch names, short SHAs, file paths or
-  "the 2026-10-16 comment". The label is the one the thing already has where
-  the reader would look (its title, subject, heading or name), or a short
-  descriptive name coined at first mention. Machine identifiers go in
-  parentheses after the label; an acronym comes first, with its expansion
-  in parentheses at its first use; anything with an address is a link; vague
-  pointers like "the fix above" are replaced by the label. Use whenever
-  writing prose that refers to things defined elsewhere: status reports,
-  PR bodies, commit messages, replies, reviews, docs, an agent's turn
-  summaries.
-tags: [writing, references]
+description: Refer to each thing defined elsewhere (an issue, pull request, commit, branch, file, document, person, event, earlier message or list item) by one canonical label, used word for word every time, never by a cryptic identifier alone, so no bare "#206", branch names, short SHAs, file paths or "the 2026-10-16 comment". The label is the one the thing already has where the reader would look (its title, subject, heading or name), or a short descriptive name coined at first mention. Machine identifiers go in parentheses after the label, except a GitHub number or short SHA, which leads it; an acronym comes first, with its expansion in parentheses at its first use; anything with an address is a link; vague pointers like "the fix above" are replaced by the label. Use whenever writing prose that refers to things defined elsewhere, such as status reports, PR bodies, commit messages, replies, reviews, docs and an agent's turn summaries.
 ---
 
-# writing-hygiene-refer-by-canonical-label
+# Refer by canonical label
+
+_Each thing defined elsewhere has one canonical label, used word for word every time, with its machine identifiers in parentheses after it and a link when it has an address._
 
 Writers refer to things by the identifier they happen to have in hand: a
 bare pull request number (#206), a branch name
@@ -26,16 +14,6 @@ date ("the 2026-10-16 comment"). To the writer each is unambiguous. To the
 reader each is a lookup: open the tracker, search the log, scroll the
 thread, then come back and find their place. Three of those in one
 paragraph and the reader stops following.
-
-The rule: **each thing has one canonical label, and you use it word for
-word every time you refer to it.** Identifiers ride along after it, in
-parentheses; addresses make it a link.
-
-## How to load this skill
-
-Passive reference. Loading it doesn't mean the user wants anything
-rewritten now; it means that whenever you refer to something defined
-elsewhere, you'll name it so the reader doesn't have to look it up.
 
 ## Choosing the canonical label
 
@@ -63,7 +41,11 @@ thing.
   place.** Numbers, branch names, SHAs, paths and dates help the reader
   find the thing once they know what it is; they don't tell them what it
   is. Branch names read especially badly: dashes, slashes and underscores
-  in place of words.
+  in place of words. A GitHub issue, pull request or commit is the one
+  exception: its number or short SHA leads, as in
+  `#206 "Fix new_project.bats on macOS…"`, the form
+  `github-hygiene-refer-to-issues-and-pull-requests` sets out, since
+  GitHub renders and links the number.
 - **An acronym comes first, its expansion after it in parentheses, at its
   first use in a text:** CRP (C-reactive protein). Don't coin an acronym
   where none is in common use.
@@ -224,27 +206,30 @@ After:
 helper" (#198) and "Pin bats to 1.11" (#201) merged first.
 ```
 
-## Where it applies
-
-Any prose that refers to things defined elsewhere: status reports, pull
-request bodies, commit messages, issue comments, replies, code review
-comments, docs, release notes, and an agent's progress updates and turn
-summaries. The narrower the reader's context (someone arriving from a
-notification, a reviewer skimming, the user returning after a break), the
-more each label saves them.
-
-Platform specifics, such as how to label GitHub issues, pull requests and
-commits and how to fetch their titles, are in
-`github-hygiene-refer-to-issues-and-pull-requests`.
-
 ## When to apply
 
+The narrower the reader's context (someone arriving from a notification, a
+reviewer skimming, the user returning after a break), the more each label
+saves them.
+
 - Writing any sentence that mentions an issue, pull request, commit,
-  branch, file, document, person, event, earlier message or list item.
+  branch, file, document, person, event, earlier message or list item, in
+  any prose: status reports, pull request bodies, commit messages, issue
+  comments, replies, code review comments, docs, release notes, and an
+  agent's progress updates and turn summaries.
 - Reviewing text that uses bare numbers, SHAs, branch names, paths or dates
   as references, or points back with "above", "those" or "that".
 - Coining a name for something that has none: use it identically from then
   on.
+
+## Your preferences
+
+!`cat "${CLAUDE_SKILL_DIR}/../writing-hygiene-refer-by-canonical-label.preferences.md" "${CLAUDE_PROJECT_DIR}/.agents/skills/writing-hygiene-refer-by-canonical-label.preferences.md" 2>/dev/null || true`
+
+If your agent doesn't run the line above, read these files yourself if they
+exist: `writing-hygiene-refer-by-canonical-label.preferences.md` next to this skill's folder, then
+`.agents/skills/writing-hygiene-refer-by-canonical-label.preferences.md` in the project. A project's
+file overrides the user's, and the user's overrides this skill's defaults.
 
 ## Related skills
 
@@ -254,3 +239,4 @@ missing and ask whether to install it from the same collection this skill
 came from; don't apply it from memory.
 
 - `github-hygiene-refer-to-issues-and-pull-requests`: this rule applied to GitHub: issue and pull request titles, cross-repo references, commit SHAs with subjects, fetching labels with `gh`.
+- `coding-agent-skill-references`: the preferences files this skill reads.
