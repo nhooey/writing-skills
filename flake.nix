@@ -91,40 +91,14 @@
         '';
       };
       perSystem =
-        { system, pkgs, ... }:
-        let
-          # `skill-structure check [SKILLS_DIR]` checks every skill under
-          # ./skills: frontmatter name matches the directory, description
-          # present and within the limit, flake.nix builds the same
-          # skillName, relative links resolve. The script stays in its own
-          # file beside its unit tests; this only puts it on PATH.
-          skill-structure = pkgs.writeShellApplication {
-            name = "skill-structure";
-            runtimeInputs = [ pkgs.python3 ];
-            runtimeEnv.PYTHONDONTWRITEBYTECODE = "1";
-            text = ''exec python3 ${./tests/skill_structure.py} "$@"'';
-          };
-        in
+        { system, ... }:
         {
           packages = base.packages.${system};
 
           apps = base.apps.${system};
 
-          # `skill-structure` runs the dev shell's `skill-structure check`
-          # over ./skills; `skill-structure-tests` runs the checker's own
-          # unit tests.
-          checks = {
-            skill-structure = pkgs.runCommand "skill-structure" {
-              nativeBuildInputs = [ skill-structure ];
-            } "skill-structure check ${./skills}\ntouch $out";
-            skill-structure-tests = pkgs.runCommand "skill-structure-tests" {
-              nativeBuildInputs = [ pkgs.python3 ];
-              PYTHONDONTWRITEBYTECODE = "1";
-            } "python3 -m unittest discover -v -s ${./tests}\ntouch $out";
-          };
-
-          # `nix fmt` runs nixfmt over `.nix`, prettier over `.md` / `.yaml`
-          # and ruff over `.py`; the module also surfaces a
+          # `nix fmt` runs nixfmt over `.nix` and prettier over `.md` /
+          # `.yaml`; the module also surfaces a
           # `checks.${system}.treefmt` so `nix flake check` fails on any
           # unformatted file. prettier's includes are pinned to markdown and
           # YAML so it leaves JSON, such as a skill's `evals.json`, alone. Add
@@ -133,28 +107,12 @@
             projectRootFile = "flake.nix";
             programs.nixfmt.enable = true;
             programs.prettier.enable = true;
-            programs.ruff-format.enable = true;
             settings.formatter.prettier.includes = [
               "*.md"
               "*.yaml"
               "*.yml"
             ];
           };
-
-          # The devshellSkills module (imported above) supplies this devShell's
-          # name, motd, the install-skills startup that reconciles the runtime
-          # `skills-devshell/` sub-flake at project scope, the ci/dev/maintenance
-          # command trio (check / fmt / update-flake), and the skills commands
-          # (reap-skills / update-skills-devshell). The commands below
-          # concatenate onto that list.
-          devshells.default.commands = [
-            {
-              category = "ci";
-              name = "skill-structure";
-              help = "Check every skill's frontmatter, flake.nix skillName and links";
-              package = skill-structure;
-            }
-          ];
         };
     };
 }

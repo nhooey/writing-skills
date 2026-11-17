@@ -55,7 +55,16 @@ Package outputs:
 
 ```bash
 nix develop            # enter the dev shell; run `menu` to list commands
-fmt                    # nixfmt over *.nix, prettier over *.md / *.yaml, ruff over *.py
-check                  # nix flake check: formatting, skill structure and its unit tests
-skill-structure check  # check every skill's frontmatter, skillName and links
+fmt                    # nixfmt over *.nix, prettier over *.md / *.yaml
+check                  # nix flake check: formatting and agent-skill-flake's skill checks
+```
+
+Skill structure (frontmatter, `name`, `description`, `skillName` and
+relative links) is held by agent-skill-flake's `skill-layout` and
+`skill-description` checks, which read their settings from
+[`skill-checks.toml`](skill-checks.toml). To run them from a checkout of
+agent-skill-flake rather than the version `flake.lock` pins:
+
+```bash
+nix flake check --override-input agent-skill-flake path:<agent-skill-flake checkout> --no-write-lock-file
 ```
