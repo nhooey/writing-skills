@@ -1,6 +1,6 @@
 ---
 name: writing-hygiene-tables-for-comparison
-description: Rewrite prose or lists as a table, or reshape an existing table, for comparison or alignment. Comparison is several items described against the same properties ("X supports A, costs B; Y supports A', costs B'"), which the reader must align in their head. Alignment is many parallel label-to-value rows (shortcuts, flags, environment variables) that scan better as columns. Covers spotting the item-by-property grid, the axes (items in rows, first column names the item), which properties earn a column, moving uniform properties to a list under the table, fixing items-as-columns tables, when not to tabulate, and keeping the table faithful (every cell filled, nothing invented). Any format: docs, READMEs, decision docs, "X vs Y" sections, PR descriptions, GitHub issues, messages to other projects, reports. Use when two or more items share the same dimensions, or when the user asks to "compare these", "tabulate this", "show the trade-offs", "which should I pick" or "make a reference table".
+description: Load before writing or editing anything that compares items on the same properties or lists many label-to-value rows, in a report, GitHub issue, message to another project, decision doc, README or PR description, or reshaping an existing table. Writes it as a table with items in rows. Also for "compare these", "show the trade-offs", "which should I pick" or "tabulate this".
 ---
 
 # Tables for comparison

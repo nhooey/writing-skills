@@ -1,6 +1,6 @@
 ---
 name: writing-hygiene-headings-as-outline
-description: Break a long, single-stream document into a heading hierarchy that mirrors its topic structure, so the headings alone read as an outline and the reader can skim the shape before committing to the prose. Covers when a wall of text is hiding sections (topic shifts, parallel sub-topics, "first… also… finally" seams), how to assign levels (one title, sections, sub-sections, no skipped levels), how to write heading text that scans, why a bold line is not a heading, and when not to add headings (a few paragraphs on one topic, a chat message, a single linear argument). Any format: docs, READMEs, design docs, RFCs, long PR descriptions, long GitHub issues and messages to other projects, release notes, reports. Use when a document runs longer than a screen and covers more than one topic, or when the user asks to "add headings", "give this structure", "make it skimmable", "outline this" or "break this into sections".
+description: Load before writing or editing a document, report, GitHub issue, message to another project, design doc, README or PR description that covers more than one topic or runs past a screen. Gives it a heading hierarchy that reads as an outline. Also for "add headings", "give this structure", "outline this", "break this into sections" or "make it skimmable".
 ---
 
 # Headings as an outline

@@ -20,3 +20,6 @@ is a directory under `skills/` with a `SKILL.md` and its own `flake.nix`.
   characters, `flake.nix` builds the same `skillName`, relative links
   resolve), without the rest of `check`. The tool lives in
   `tests/skill_structure.py`.
+- agent-skill-flake's `skill-description` check holds each skill listed
+  under `trigger-first` in `skill-checks.toml` to a description that opens
+  on `Load ` and stays within 500 characters.
