@@ -272,4 +272,5 @@ came from; don't apply it from memory.
 - `markdown-hygiene-lists-headings-tables`: Markdown syntax for tables: pipes and alignment, `<br/>` inside cells, ✅/❌ cells, a hyperlinked first column.
 - `writing-hygiene-prose-to-lists`: when the items don't share properties, or there is only one property and few rows, a list instead of a table.
 - `writing-hygiene-refer-by-canonical-label`: naming each item by its canonical label and linking it.
+- `writing-hygiene-group-by-reader-action`: when the reader acts on one property whose values repeat down the rows, groups keyed by it instead of a column.
 - `coding-agent-skill-references`: the preferences files this skill reads.

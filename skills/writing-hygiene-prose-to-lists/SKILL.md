@@ -149,4 +149,5 @@ came from; don't apply it from memory.
 
 - `markdown-hygiene-lists-headings-tables`: Markdown syntax for lists: nesting indents, numbered lists, hard line breaks inside an item.
 - `writing-hygiene-tables-for-comparison`: when the items all share the same properties, a table instead of a list.
+- `writing-hygiene-group-by-reader-action`: when the list runs past a screen, its items sorted into groups by what the reader does with each.
 - `coding-agent-skill-references`: the preferences files this skill reads.

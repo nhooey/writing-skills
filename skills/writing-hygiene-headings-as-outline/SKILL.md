@@ -172,4 +172,6 @@ came from; don't apply it from memory.
 
 - `markdown-hygiene-lists-headings-tables`: Markdown syntax for headings: `#` levels, ATX style, anchors.
 - `writing-hygiene-prose-to-lists`: when a "section" is really one sentence, a list item instead of a heading.
+- `writing-hygiene-group-by-reader-action`: when a section is a long run of like items, group headings that carry each group's count.
+- `writing-hygiene-progressive-disclosure`: which sections lead, and which hold detail that is folded away or left to the end.
 - `coding-agent-skill-references`: the preferences files this skill reads.
