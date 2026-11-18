@@ -1,35 +1,40 @@
 ---
 name: writing-hygiene-prose-to-lists
-description: Rewrite run-on sentences that pile clauses behind commas, semicolons and "and"/"or" as nested lists when the prose is really an enumeration, a hierarchy or a set of parallel options. Covers how to tell a list in disguise from genuine prose, how to map comma, semicolon and colon structure onto list nesting, when not to convert (narrative, a short pair, a short sequence that reads fine inline, a one-line summary), and how to keep the rewrite faithful (no dropped items, no invented hierarchy). Any format: docs, READMEs, PR descriptions, commit bodies, GitHub issues, messages to other projects, release notes, reports, replies. Use when a sentence enumerates three or more items, hides sub-items behind its commas or strings parallel clauses together, or when the user asks to "condense", "clean up", "make this scannable", "break up this wall of text" or "use lists here".
+description: Load before writing or editing any report, summary, GitHub issue or comment, PR description, commit body, message to another project, doc or reply that lists three or more things, or code that prints such text. Writes each inline run of parallel items as a flat or nested list, whatever joins its items, and leaves narrative as prose. Also for "condense", "make this scannable", "break up this wall of text" or "use lists here".
 ---
 
 # Prose to lists
 
-_A run-on sentence that enumerates things is a list written as prose. Rewrite it as a nested list where it really is one, and leave genuine prose alone._
+_An inline run of parallel items is a list written on one line, whatever joins the items._
+_Rewrite it as a flat or nested list where it really is one, and leave genuine prose alone._
 
-Commas, semicolons and a trailing "and" do the job that list items and
-indentation do better: making each item visible, countable and skimmable.
-The syntax of a list in a given format (Markdown indentation, line breaks
-inside an item) is in `markdown-hygiene-lists-headings-tables`.
+Whatever sits between the items, be it punctuation, a conjunction or a separator glyph, it does the job that list items and indentation do better: making each item visible, countable and skimmable.
+The syntax of a list in a given format (Markdown indentation, line breaks inside an item) is in `markdown-hygiene-lists-headings-tables`.
 
 ## When this applies
 
-Convert to a nested list when a sentence, or a chain of them, is
-structurally an enumeration:
+Convert to a list when a sentence, a line or a chain of them is an inline run of parallel items: three or more items of the same kind, set side by side and told apart only by what sits between them.
+The run is the pattern, not its separator.
+A few of the shapes it takes:
 
-- **Three or more parallel items** strung behind commas: "Covers input
-  pinning, input ordering, the `@inputs` convention, `inherit` vs `with`,
-  and formatting."
-- **Items that carry their own sub-detail**: a comma clause with a
-  parenthetical or a "such as" tail. That sub-detail wants a child item, not
-  burial mid-line.
-- **A colon followed by a comma series**: "It exposes three apps: install,
-  which writes the symlink; uninstall, which removes it; and reap, which
-  sweeps broken entries." The colon announces a list out loud.
-- **Parallel options or cases** joined by "or" / "either … or": each
-  alternative is a sibling item.
-- **A sentence you re-read to count the items.** If you can't tell at a
-  glance whether there are four or five, neither can the reader.
+- **Clauses in a sentence**: "Covers input pinning, input ordering, the `@inputs` convention, `inherit` vs `with`, and formatting."
+- **Fields on a status line**: "build ✅ · tests ❌ 3 failing · lint ✅ · deploy skipped".
+- **Pairs between slashes**: "Owner: platform / On call: Ana / Escalation: #infra-alerts / Runbook: docs/oncall.md".
+- **Lines forced apart outside a table cell**: `Changed: README.md<br/>flake.nix<br/>skills/x/SKILL.md` in a paragraph of a generated report.
+- **A legend line**: "Legend: ✅ passed, ❌ failed, ⏭ skipped, 🔄 retrying" above a table of results.
+
+The run also hides structure that a list shows:
+
+- **Items that carry their own sub-detail**: an item with a parenthetical or a "such as" tail.
+  That sub-detail wants a child item, not burial mid-line.
+- **A colon followed by a series**: "It exposes three apps: install, which writes the symlink; uninstall, which removes it; and reap, which sweeps broken entries."
+  The colon announces a list out loud.
+- **Parallel options or cases** joined by "or" / "either … or": each alternative is a sibling item.
+- **A line you re-read to count the items.**
+  If you can't tell at a glance whether there are four or five, neither can the reader.
+
+Text a program writes counts as much as text a person writes: a script's Markdown report, a CLI's summary, a generated PR body.
+There, fix the code that builds the line, so every run it prints comes out as a list.
 
 ## When to leave it alone
 
@@ -47,8 +52,8 @@ Not every comma is a latent list item. Keep prose as prose when:
   on each other grammatically (a shared subject mid-clause, a "which"
   modifying the whole preceding idea), splitting them strands fragments that
   no longer parse.
-- **It's a single dense summary line** where one scannable sentence is the
-  convention: a description field, a one-line title, a commit subject.
+- **It's a single dense summary line** where one scannable line is the convention: a description field, a one-line title, a commit subject, a status bar that must fit one row.
+- **It's inside a table cell**, where Markdown allows no list: `<br/>` between the cell's lines is the right form there.
 
 When in doubt: _are these items parallel and independently meaningful, or
 one connected thought?_ Parallel and independent: list. Connected thought:
@@ -59,10 +64,9 @@ leave it.
 1. **Find the spine.** Identify the head clause (often everything before
    the first colon, or the verb governing the series). It becomes the
    lead-in line or the parent item.
-2. **Split on the top-level separators.** Each top-level comma, semicolon,
-   "and" or "or" becomes one sibling item. Watch for nested commas: a comma
-   inside a parenthetical or a "such as X, Y" tail marks a child, not a
-   sibling.
+2. **Split on the top-level joins.** Each join at the top level of the run, whatever it is, becomes a boundary between sibling items.
+   Watch for joins one level down: a comma inside a parenthetical or a "such as X, Y" tail marks a child, not a sibling.
+   A character that belongs to an item, such as the slash in a path or the comma in a number, is no join at all.
 3. **Nest the sub-detail.** Move each item's qualifier, example or
    "(because …)" onto a child item. This is where two-level nesting earns
    its keep.
@@ -119,16 +123,16 @@ prose implied.
 
 ## Quick heuristic
 
-> Read the sentence aloud. If you naturally pause and count ("one… two…
-> three…"), it's a list. If you'd never list it on a whiteboard, it's prose.
+> Read the line aloud.
+> If you naturally pause and count ("one… two… three…"), it's a list.
+> If you'd never list it on a whiteboard, it's prose.
 > Convert the first; leave the second.
 
 ## When to apply
 
-- Writing or editing any prose meant to be read by someone else: docs,
-  READMEs, PR descriptions, commit bodies, release notes, status reports,
-  replies.
-- Reviewing text where a sentence enumerates three or more parallel items.
+- Writing or editing any text meant to be read by someone else: docs, READMEs, PR descriptions, commit bodies, release notes, status reports, replies.
+- Writing or reviewing code that generates text for a reader, such as a script that writes a Markdown report or a tool that prints a summary to the terminal.
+- Reviewing text where a sentence or line strings three or more parallel items together.
 - The user asks to condense, clean up or make text scannable.
 
 ## Your preferences

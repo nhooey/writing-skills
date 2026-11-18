@@ -22,7 +22,7 @@ Each skill is a self-contained directory under [`skills/`](skills/) with a
 
 | Skill                                                                                                  | What it does                                                                                                            |
 | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| [`writing-hygiene-prose-to-lists`](skills/writing-hygiene-prose-to-lists/SKILL.md)                     | Rewrite run-on sentences that are really enumerations as nested lists, faithfully; leave real narrative alone.          |
+| [`writing-hygiene-prose-to-lists`](skills/writing-hygiene-prose-to-lists/SKILL.md)                     | Rewrite an inline run of parallel items as a list, whatever joins them, faithfully; leave real narrative alone.         |
 | [`writing-hygiene-headings-as-outline`](skills/writing-hygiene-headings-as-outline/SKILL.md)           | Give a long, multi-topic document a heading hierarchy that reads as its outline.                                        |
 | [`writing-hygiene-tables-for-comparison`](skills/writing-hygiene-tables-for-comparison/SKILL.md)       | Lift items described against the same properties into a table: items in rows, only differing properties as columns.     |
 | [`writing-hygiene-refer-by-canonical-label`](skills/writing-hygiene-refer-by-canonical-label/SKILL.md) | Refer to each issue, commit, file or event by one canonical label, linked, with identifiers in parentheses after it.    |

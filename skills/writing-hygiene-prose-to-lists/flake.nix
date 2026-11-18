@@ -1,5 +1,5 @@
 {
-  description = "writing-hygiene-prose-to-lists: Agent skill — rewrite prose that is really an enumeration, hierarchy or set of options as a nested list, faithfully, and leave real narrative alone";
+  description = "writing-hygiene-prose-to-lists: Agent skill — rewrite an inline run of parallel items, whatever joins them, as a flat or nested list, faithfully, and leave real narrative alone";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
