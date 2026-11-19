@@ -22,11 +22,13 @@ Each skill is a self-contained directory under [`skills/`](skills/) with a
 
 | Skill                                                                                                  | What it does                                                                                                            |
 | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| [`writing-hygiene-prose-to-lists`](skills/writing-hygiene-prose-to-lists/SKILL.md)                     | Rewrite run-on sentences that are really enumerations as nested lists, faithfully; leave real narrative alone.          |
+| [`writing-hygiene-prose-to-lists`](skills/writing-hygiene-prose-to-lists/SKILL.md)                     | Rewrite an inline run of parallel items as a list, whatever joins them, faithfully; leave real narrative alone.         |
 | [`writing-hygiene-headings-as-outline`](skills/writing-hygiene-headings-as-outline/SKILL.md)           | Give a long, multi-topic document a heading hierarchy that reads as its outline.                                        |
 | [`writing-hygiene-tables-for-comparison`](skills/writing-hygiene-tables-for-comparison/SKILL.md)       | Lift items described against the same properties into a table: items in rows, only differing properties as columns.     |
 | [`writing-hygiene-refer-by-canonical-label`](skills/writing-hygiene-refer-by-canonical-label/SKILL.md) | Refer to each issue, commit, file or event by one canonical label, linked, with identifiers in parentheses after it.    |
 | [`writing-hygiene-declarative-statements`](skills/writing-hygiene-declarative-statements/SKILL.md)     | Write each artifact as state: a snapshot says what is true, a delta what became true (before → after), never the steps. |
+| [`writing-hygiene-group-by-reader-action`](skills/writing-hygiene-group-by-reader-action/SKILL.md)     | Sort a long run of items into groups by what the reader does with each, counted, ordered, each kind marked by an emoji. |
+| [`writing-hygiene-progressive-disclosure`](skills/writing-hygiene-progressive-disclosure/SKILL.md)     | Lead with the summary and what needs action, then the groups; fold the detail away, or put it last where nothing folds. |
 
 ## Install
 
@@ -46,12 +48,23 @@ Package outputs:
 - `agent-skill-nhooey-writing-hygiene-tables-for-comparison`
 - `agent-skill-nhooey-writing-hygiene-refer-by-canonical-label`
 - `agent-skill-nhooey-writing-hygiene-declarative-statements`
+- `agent-skill-nhooey-writing-hygiene-group-by-reader-action`
+- `agent-skill-nhooey-writing-hygiene-progressive-disclosure`
 
 ## Development
 
 ```bash
 nix develop            # enter the dev shell; run `menu` to list commands
-fmt                    # nixfmt over *.nix, prettier over *.md / *.yaml, ruff over *.py
-check                  # nix flake check: formatting, skill structure and its unit tests
-skill-structure check  # check every skill's frontmatter, skillName and links
+fmt                    # nixfmt over *.nix, prettier over *.md / *.yaml
+check                  # nix flake check: formatting and agent-skill-flake's skill checks
+```
+
+Skill structure (frontmatter, `name`, `description`, `skillName` and
+relative links) is held by agent-skill-flake's `skill-layout` and
+`skill-description` checks, which read their settings from
+[`skill-checks.toml`](skill-checks.toml). To run them from a checkout of
+agent-skill-flake rather than the version `flake.lock` pins:
+
+```bash
+nix flake check --override-input agent-skill-flake path:<agent-skill-flake checkout> --no-write-lock-file
 ```

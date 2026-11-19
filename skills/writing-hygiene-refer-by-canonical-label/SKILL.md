@@ -1,6 +1,6 @@
 ---
 name: writing-hygiene-refer-by-canonical-label
-description: Refer to each thing defined elsewhere (an issue, pull request, commit, branch, file, document, person, event, earlier message or list item) by one canonical label, used word for word every time, never by a cryptic identifier alone, so no bare "#206", branch names, short SHAs, file paths or "the 2026-10-16 comment". The label is the one the thing already has where the reader would look (its title, subject, heading or name), or a short descriptive name coined at first mention. Machine identifiers go in parentheses after the label, except a GitHub number or short SHA, which leads it; an acronym comes first, with its expansion in parentheses at its first use; anything with an address is a link; vague pointers like "the fix above" are replaced by the label. Use whenever writing prose that refers to things defined elsewhere, such as status reports, PR bodies, commit messages, replies, reviews, docs and an agent's turn summaries.
+description: Load before writing or editing prose that mentions a file, branch, document, person, event, earlier message, list item or code, in a report, GitHub issue, PR body, commit message, message to another project, reply, review or doc. Names each by one readable label, never a bare identifier, and links code by a pinned permalink. For issues, PRs and commits, `github-hygiene-refer-to-issues-and-pull-requests` has the format.
 ---
 
 # Refer by canonical label
@@ -55,6 +55,7 @@ thing.
 - **Anything with an address is a link**, so the label itself is clickable:
   an issue's URL, a commit's page, a file's path in the repository, a
   message's permalink.
+  A spot in code is linked the same way, by a permalink pinned to a commit, as [Pointing at code](#pointing-at-code) says.
 - **No vague pointers back.** "The fix above", "those PRs", "that branch",
   "the earlier issue": repeat the canonical label instead. The reader may
   have skipped "above", and in a long text "those" has several candidates.
@@ -62,65 +63,30 @@ thing.
   paragraph, "the bats patch" in the next and "#206" in the third. Three
   names read as three things.
 
+### Pointing at code
+
+Prose that points at code refers to the diff and never repeats it, so it holds no list of the commits, the changed files or what each file does.
+The diff is one click away and always exact, while a copy of it in prose is more to read and drifts as soon as the branch moves on.
+Say what the change achieves and why, and leave the how to the diff.
+
+Where one spot in the code matters to the point, link that file and line range with a GitHub permalink pinned to a full commit SHA, such as `https://github.com/<owner>/<repo>/blob/<sha>/<path>#L10-L20`.
+A SHA never moves, so the link shows the same lines after later pushes, rebases and merges.
+A branch link, `blob/<branch>/<path>`, shows whatever the branch holds when the reader clicks, so it's only for "the current version".
+The link's text is the name of what it points at, such as a function, a setting or a file.
+
+This holds in pull request descriptions, commit messages, reports and agent replies alike.
+
 ## Before and after
 
 Links below are written in Markdown; use the link form of whatever format
 you're writing in.
 
-### Issues and pull requests
+### Issues, pull requests, commits and branches
 
-Before:
-
-```text
-#206 is ready, but it depends on #198. Once that lands I'll rebase.
-```
-
-After:
-
-```markdown
-[#206 "Fix new_project.bats on macOS…"](https://github.com/acme/widget/pull/206)
-is ready, but it depends on
-[#198 "Add a portable copy_path helper"](https://github.com/acme/widget/pull/198).
-Once "Add a portable copy_path helper" lands I'll rebase
-"Fix new_project.bats on macOS…" onto it.
-```
-
-### Branches
-
-Before:
-
-```text
-I pushed up/22-bats-copy-path-macos and opened a PR from it.
-```
-
-After:
-
-```markdown
-I pushed the fix and opened
-[#206 "Fix new_project.bats on macOS…"](https://github.com/acme/widget/pull/206)
-(branch `up/22-bats-copy-path-macos`).
-```
-
-The branch is a detail of the pull request, so it goes in parentheses after
-the pull request's label, never as the reference itself.
-
-### Commits
-
-Before:
-
-```text
-8127188 fixes it; 3f0a9c2 was a partial attempt, reverted in 77b1e04.
-```
-
-After:
-
-```markdown
-[`8127188` "Copy paths with cp -R on macOS"](https://github.com/acme/widget/commit/8127188)
-fixes it. An earlier partial attempt,
-[`3f0a9c2` "Use rsync to copy test fixtures"](https://github.com/acme/widget/commit/3f0a9c2),
-was reverted in
-[`77b1e04` "Revert: Use rsync to copy test fixtures"](https://github.com/acme/widget/commit/77b1e04).
-```
+`github-hygiene-refer-to-issues-and-pull-requests` sets out the forms for
+these, with before-and-after examples: the number or short SHA, then the
+title or subject in quotes, linked, and a branch only in parentheses after
+its pull request.
 
 ### Files and documents
 
@@ -135,6 +101,27 @@ After:
 ```markdown
 See ["ADR 7: Store sessions in Redis"](docs/adr/0007.md) for the reasoning.
 ```
+
+### Code a change touches
+
+Before:
+
+```text
+This PR changes three files:
+- config.py: adds a retry_limit setting
+- client.py: retries failed requests up to retry_limit times
+- test_client.py: adds tests for the retry loop
+```
+
+After:
+
+```markdown
+Failed requests are retried up to `retry_limit` times before the error reaches the caller.
+The backoff resets after any success, in [`send_with_retry`](https://github.com/acme/widget/blob/4f2c9e1a7b3d5e8f0a1c2b3d4e5f6a7b8c9d0e1f/client.py#L42-L58), so one bad minute doesn't slow every request after it.
+```
+
+The file list is the diff's job.
+The one spot worth reading is a click away, at the lines the sentence was written about, even after the branch moves on.
 
 ### Dated events
 
@@ -196,14 +183,14 @@ doesn't. Keep the number only as a parenthetical aid.
 Before:
 
 ```text
-The fix above also needs those PRs merged first.
+The section above also needs those diagrams redrawn first.
 ```
 
 After:
 
 ```text
-"Copy paths with cp -R on macOS" also needs "Add a portable copy_path
-helper" (#198) and "Pin bats to 1.11" (#201) merged first.
+"Rollback plan" also needs the "Session lifecycle" and "Cache eviction"
+diagrams redrawn first.
 ```
 
 ## When to apply
@@ -219,6 +206,7 @@ saves them.
   agent's progress updates and turn summaries.
 - Reviewing text that uses bare numbers, SHAs, branch names, paths or dates
   as references, or points back with "above", "those" or "that".
+- Describing a change: link the code that matters instead of listing commits or files.
 - Coining a name for something that has none: use it identically from then
   on.
 
@@ -238,5 +226,6 @@ without asking. If it isn't in your listing, tell the user which skill is
 missing and ask whether to install it from the same collection this skill
 came from; don't apply it from memory.
 
-- `github-hygiene-refer-to-issues-and-pull-requests`: this rule applied to GitHub: issue and pull request titles, cross-repo references, commit SHAs with subjects, fetching labels with `gh`.
+- `github-hygiene-refer-to-issues-and-pull-requests`: this rule applied to GitHub, and the one source for the forms of issue, pull request, commit and branch references: titles, cross-repo references, commit SHAs with subjects, fetching labels with `gh`.
 - `coding-agent-skill-references`: the preferences files this skill reads.
+- `git-hygiene-commit-message-format`: what a commit body cuts, such as diff paraphrase, which a permalink to the code replaces.

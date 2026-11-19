@@ -1,6 +1,6 @@
 ---
 name: writing-hygiene-tables-for-comparison
-description: Rewrite prose or lists as a table, or reshape an existing table, for one of two reasons, comparison or alignment. Comparison is several items described against the same properties ("X supports A, costs B; Y supports A', costs B'"), which the reader must align in their head. Alignment is many parallel label-to-value rows (shortcuts, flags, environment variables, glossary entries) that scan better as columns. Covers spotting the item-by-property grid, the axes (items in rows, first column names the item), which properties earn a column (notable, shared, values differ), moving uniform properties to a list under the table, fixing items-as-columns tables, when not to tabulate, and keeping the table faithful (every cell filled, nothing invented). Any format: docs, READMEs, decision docs, "X vs Y" sections, PR descriptions, reports. Use when two or more items share the same dimensions, or when the user asks to "compare these", "tabulate this", "show the trade-offs", "which should I pick" or "make a reference table".
+description: Load before writing or editing anything that compares items on the same properties or lists many label-to-value rows, in a report, GitHub issue, message to another project, decision doc, README or PR description, or reshaping an existing table. Writes it as a table with items in rows. Also for "compare these", "show the trade-offs", "which should I pick" or "tabulate this".
 ---
 
 # Tables for comparison
@@ -272,4 +272,5 @@ came from; don't apply it from memory.
 - `markdown-hygiene-lists-headings-tables`: Markdown syntax for tables: pipes and alignment, `<br/>` inside cells, ✅/❌ cells, a hyperlinked first column.
 - `writing-hygiene-prose-to-lists`: when the items don't share properties, or there is only one property and few rows, a list instead of a table.
 - `writing-hygiene-refer-by-canonical-label`: naming each item by its canonical label and linking it.
+- `writing-hygiene-group-by-reader-action`: when the reader acts on one property whose values repeat down the rows, groups keyed by it instead of a column.
 - `coding-agent-skill-references`: the preferences files this skill reads.
