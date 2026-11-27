@@ -62,6 +62,15 @@ thing.
 - **The same label every time.** Don't call it "the macOS fix" in one
   paragraph, "the bats patch" in the next and "#206" in the third. Three
   names read as three things.
+- **Public text names nothing private.** A public repository's files,
+  commits, pull request titles and bodies, issues, comments and release
+  notes never name a private repository or a person's private
+  configuration, nor a local path under a home directory. Before naming a
+  repository there, check its visibility, as in
+  `gh repo view <owner>/<repo> --json visibility --jq .visibility`. A
+  private one is described by what it is, "a system configuration" or
+  "the account's settings, managed elsewhere", instead of named. The
+  check reads visibility, so no list of private names is kept.
 
 ### Pointing at code
 
@@ -207,6 +216,8 @@ saves them.
 - Reviewing text that uses bare numbers, SHAs, branch names, paths or dates
   as references, or points back with "above", "those" or "that".
 - Describing a change: link the code that matters instead of listing commits or files.
+- Naming a repository in public text: check its visibility first, and
+  describe a private one instead of naming it.
 - Coining a name for something that has none: use it identically from then
   on.
 
